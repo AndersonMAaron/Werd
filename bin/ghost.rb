@@ -1,0 +1,100 @@
+#!/usr/bin/ruby
+
+DICTIONARY = "dictionary/dictionary.txt"
+MIN_LETTER_CNT = 3 # Phrase must be at least X letters long to qualify as a word
+
+def read_dictionary(filename)
+  dictionary = {}
+  File.open(File.absolute_path(filename)).each { |line| dictionary[line.chomp("\n")] = "e" }
+  dictionary
+end
+
+def is_word?(letters)
+  return false if letters.length < MIN_LETTER_CNT # Must be ^ length to qualify
+  @dictionary.has_key? letters
+end
+
+def narrow_dictionary(letters)
+  @dictionary.select! { |word| word.start_with?(letters) == true }
+end
+
+def ai_choose_letter(letters)
+  words = @dictionary.to_a
+  good_choice = false
+  loop_counter = 0
+  until good_choice do
+    return words.sample.first[letters.length] if (loop_counter += 1) > 50
+    good_choice = good_choice?(letters, word = words.sample.first)
+  end
+
+  word[letters.length]
+end
+
+def good_choice?(letters, word_to_spell)
+  # True if the remainder of word is of even length and if no words are formed inside of it
+  word_to_spell.length.times { |t| return false if is_word?(word_to_spell[0...t]) }
+  return word_to_spell.sub('#{letters}', '').length % 2 != 0
+end
+
+def is_sequence_trappable?(letters)
+  possible_words = @dictionary.select { |word| word.start_with?(letters) == true && word.length >= MIN_LETTER_CNT }
+  possible_words.each do |word, blah|
+    puts "word is trappable: #{word}" if word.length % 2 == 0
+    return true if word.length % 2 == 0
+  end
+  false
+end
+
+def gloat(letters)
+  narrow_dictionary(letters)
+  puts "Oh, dear child. The following are all of the possible words: "
+  puts @dictionary.keys
+  game_over
+end
+
+def player_turn(letters)
+  print "Please enter one, and only one letter: "
+  input = gets.chomp.downcase
+  gloat(letters) if input.downcase == "ghost" # Player gives up
+  input
+end
+
+def ai_turn(letters)
+  player_lose(letters) if @dictionary.to_a.empty? # Call them out if there are no possible words
+  letter = ai_choose_letter(letters)
+  puts "I select the letter '#{letter}'"
+  letter
+end
+
+def player_lose(word)
+  is_word = is_word?(word)
+  puts "Sorry! You formed the word '#{word}'." if is_word
+  puts "What are you trying to pull? No words can be formed from '#{word}'. GHOST!" unless is_word
+  game_over
+end
+
+def ai_lose(word)
+  puts "NO! How is this possible? I spelled the letter '#{word}'....you win. Press enter to close."
+  game_over
+end
+
+def game_over
+  puts "Press enter to close."
+  gets.chomp #Fugheddaboutit
+  exit 0
+end
+
+abort("Error: Dictionary file '#{DICTIONARY}' not found.") unless File.exists?(DICTIONARY)
+@dictionary = read_dictionary DICTIONARY
+
+puts "Lets play Ghost! You go first."
+letters = player_turn('')
+while true
+  narrow_dictionary(letters)
+  # AI turn
+  letters += ai_turn(letters)
+  ai_lose(letters) if is_word?(letters) # BEST NOT HAPPEN
+  # Player turn
+  letters += player_turn(letters)
+  player_lose(letters) if is_word?(letters)
+end
