@@ -8,6 +8,12 @@ module Word
         @dictionary = Word::Dictionary.new(dict_fn)
         @overlap_solver = Word::Play::Overlap.new(@dictionary)
       end
+
+      def self.solver_for(app)
+        dictionary = Werd.dictionary_in(:english)
+        Werd::Solver.const_get(app.downcase.capitalize).new(dictionary)
+      end
+
     end
   end
 end

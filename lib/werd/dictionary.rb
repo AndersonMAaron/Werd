@@ -7,9 +7,9 @@ module Werd
       @dictionary = read_dictionary(dict_fn)
     end
 
-    def read_dictionary(filename)
+    def self.from_file(file)
       dictionary = {}
-      File.open(File.absolute_path(filename)).each do |line|
+      File.open(filename).each do |line|
         word = line.chomp("\n")
         dictionary[word] = "e" unless word.length < MIN_LETTER_CNT
       end
@@ -17,8 +17,8 @@ module Werd
       dictionary
     end
 
-    def is_word?(letters)
-      return false if letters.length < MIN_LETTER_CNT # Must be ^ length to qualify
+    def self.is_word?(letters, minimum_letters=0)
+      return false if letters.length < minimum_letters
       @dictionary.has_key? letters
     end
   end
