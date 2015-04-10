@@ -5,7 +5,7 @@ module Word
                   :overlap_solver
 
       def initialize(dict_fn)
-        @dictionary = Word::Dictionary.new(dict_fn)
+        @dictionary = Word.dictionary_in(:english)
         @overlap_solver = Word::Play::Overlap.new(@dictionary)
       end
 

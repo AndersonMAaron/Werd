@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 DICTIONARY = "dictionary/dictionary.txt"
 MIN_LETTER_CNT = 3 # Phrase must be at least X letters long to qualify as a word

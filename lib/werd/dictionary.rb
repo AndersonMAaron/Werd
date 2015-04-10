@@ -1,23 +1,25 @@
 module Werd
   class Dictionary
 
-    MIN_LETTER_CNT = 3 # Minimum number of letters to qualify as a word
-
-    def initialize(dict_fn)
-      @dictionary = read_dictionary(dict_fn)
+    def initialize(words)
+      @dictionary = words
     end
 
-    def self.from_file(file)
+    def words
+      @dictionary
+    end
+
+    def self.from_file(file, min_letter_count)
       dictionary = {}
-      File.open(filename).each do |line|
+      File.open(file).each do |line|
         word = line.chomp("\n")
-        dictionary[word] = "e" unless word.length < MIN_LETTER_CNT
+        dictionary[word] = "e" unless word.length < min_letter_count
       end
 
-      dictionary
+      Werd::Dictionary.new(dictionary)
     end
 
-    def self.is_word?(letters, minimum_letters=0)
+    def is_word?(letters, minimum_letters=0)
       return false if letters.length < minimum_letters
       @dictionary.has_key? letters
     end
