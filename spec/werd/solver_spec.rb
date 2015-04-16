@@ -6,5 +6,10 @@ describe "Werd::Solver" do
       solver = Werd::Solver.solver_for(:overlap)
       expect(solver).to be_a(Werd::Solver::Overlap)
     end
+
+    it "can provide a scrabble solver" do
+      solver = Werd::Solver.solver_for(:scrabble)
+      expect(solver).to be_a(Werd::Solver::Scrabble)
+    end
   end
 end

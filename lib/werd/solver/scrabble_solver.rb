@@ -1,6 +1,6 @@
 module Werd
   module Solver
-    class ScrabbleSolver
+    class Scrabble
       def initialize(dictionary)
         @dictionary = dictionary
       end

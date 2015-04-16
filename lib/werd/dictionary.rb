@@ -29,7 +29,7 @@ module Werd
     end
 
     def word_that_starts_with(letters)
-      words.select { |word| word.start_with?(last_n) == true }.sample
+      words.select { |word| word.start_with?(letters) == true }.sample
     end
   end
 end
