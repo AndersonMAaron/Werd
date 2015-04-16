@@ -9,4 +9,5 @@ SimpleCov.start do
 end
 
 # Load modules to test
-require_relative '../lib/werd'
+# TODO this smells funny..
+Dir['lib/**/*.rb'].each { |file| require_relative "../#{file}" }

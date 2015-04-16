@@ -1,7 +1,6 @@
 require 'werd/dictionary'
 
 module Werd
-
   def self.fail(message='')
     raise message
   end
