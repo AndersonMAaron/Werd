@@ -1,18 +1,19 @@
 module Werd
   class Dictionary
     # Words are stored in hash solely because of lookup times
-    def initialize(words_hash)
+    def initialize(words_hash, min_letter_count=2)
       @dictionary = words_hash
+      @min_letter_count = min_letter_count
     end
 
-    def self.from_file(file, min_letter_count)
+    def self.from_file(file, min_letter_count=2)
       words_hash = {}
       File.open(file).each do |line|
         word = line.chomp("\n")
         words_hash[word] = "e" unless word.length < min_letter_count
       end
 
-      Werd::Dictionary.new(words_hash)
+      Werd::Dictionary.new(words_hash, min_letter_count)
     end
 
     def words
@@ -29,6 +30,7 @@ module Werd
     end
 
     def word_that_starts_with(letters)
+      return nil if letters.nil?
       words.select { |word| word.start_with?(letters) == true }.sample
     end
   end

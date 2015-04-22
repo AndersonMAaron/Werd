@@ -12,3 +12,16 @@ module Werd
     )
   end
 end
+
+############################################
+## Standard library extensions
+############################################
+class Hash
+  # Similar to Hash.invert, but values are stored in an array to avoid overwrites
+  def safe_invert
+    each_with_object({}) do |(key, value), out|
+      out[value] ||= []
+      out[value] << key
+    end
+  end
+end
