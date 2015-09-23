@@ -43,7 +43,7 @@ describe "Werd::Solver::Overlap" do
 
       generated_word = solver.overlapping_word(origin_word, origin_word.length)
       expect(generated_word).not_to be_nil
-      expect(generated_word.start_with?(origin_word)).to be_truthy
+      expect(generated_word.start_with?(origin_word)).to eq(true)
     end
 
     it "generates a word given an overlap amount of one" do
